@@ -1,4 +1,4 @@
-package EventManager
+package eventmanager
 
 import (
 	"encoding/json"
