@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
+	"github.com/google/uuid"
 	"github.com/nats-io/nats.go"
 )
 
@@ -53,6 +54,11 @@ func (m *EventManager) Listen(subject string, cb EventHandler) error {
 
 func (m *EventManager) Publish(subject, t string, data interface{}) error {
 	evt := cloudevents.NewEvent()
+	u, err := uuid.NewUUID()
+	if err != nil {
+		return err
+	}
+	evt.SetID(u.String())
 	evt.SetSource(fmt.Sprintf("auttaja.io/%s", m.app))
 	evt.SetType(t)
 	if err := evt.SetData(cloudevents.ApplicationJSON, data); err != nil {
